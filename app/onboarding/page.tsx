@@ -32,7 +32,7 @@ const steps = [
 export default function OnboardingPage() {
   const router = useRouter()
   const { updateSettings, completeOnboarding } = useApp()
-  const { t, language, setLanguage } = useTranslation()
+  const { t, language } = useTranslation()
   const [currentStep, setCurrentStep] = useState(0)
   const [goal, setGoal] = useState<string | null>(null)
   const [targetAmount, setTargetAmount] = useState("")
@@ -100,7 +100,7 @@ export default function OnboardingPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setLanguage(language === "en" ? "ar" : "en")}
+                onClick={() => updateSettings({ language: language === "en" ? "ar" : "en" })}
                 className="flex items-center gap-2"
               >
                 <Globe className="h-4 w-4" />
@@ -113,9 +113,17 @@ export default function OnboardingPage() {
                 <img src="/placeholder.svg?key=khgdt" alt="Sunbullah" className="w-12 h-12" />
               </div>
               <h1 className="text-3xl font-bold text-emerald-900 dark:text-emerald-50">
-                {t("onboarding.welcome.title")}
+                {t("onboarding.welcome.title", {
+                  en: "Save without feeling it",
+                  ar: "استثمر بفكة اليوم واصنع لك بكرة غير"
+                })}
               </h1>
-              <p className="text-lg text-muted-foreground max-w-xs mx-auto">{t("onboarding.welcome.subtitle")}</p>
+              <p className="text-lg text-muted-foreground max-w-xs mx-auto">
+                {t("onboarding.welcome.subtitle", {
+                  en: "Join 50,000+ Saudis growing their wealth automatically.",
+                  ar: "انضم لأكثر من 50 ألف سعودي يستثمرون بطريقة شرعية ومربحة"
+                })}
+              </p>
             </div>
 
             {/* Trust Signals Carousel */}
@@ -126,8 +134,18 @@ export default function OnboardingPage() {
                     <ShieldCheck className="h-6 w-6 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-sm">{t("onboarding.trust.regulated")}</h3>
-                    <p className="text-xs text-muted-foreground">{t("onboarding.trust.regulatedDesc")}</p>
+                    <h3 className="font-semibold text-sm">
+                      {t("onboarding.trust.regulated", {
+                        en: "Regulated & Secure",
+                        ar: "مرخص من الجهات المختصة"
+                      })}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {t("onboarding.trust.regulatedDesc", {
+                        en: "Operating in SAMA Sandbox & CMA FinTech Lab",
+                        ar: "مرخص من مؤسسة النقد العربي السعودي وهيئة السوق المالية"
+                      })}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -137,8 +155,18 @@ export default function OnboardingPage() {
                     <Check className="h-6 w-6 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-sm">{t("onboarding.trust.shariah")}</h3>
-                    <p className="text-xs text-muted-foreground">{t("onboarding.trust.shariahDesc")}</p>
+                    <h3 className="font-semibold text-sm">
+                      {t("onboarding.trust.shariah", {
+                        en: "100% Halal",
+                        ar: "استثمار شرعي 100%"
+                      })}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {t("onboarding.trust.shariahDesc", {
+                        en: "Certified Shariah-compliant investments",
+                        ar: "معتمد من كبار علماء الشريعة الإسلامية"
+                      })}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -173,79 +201,109 @@ export default function OnboardingPage() {
 
       case "phone":
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl font-bold">{t("onboarding.phone.title")}</h2>
-              <p className="text-muted-foreground">{t("onboarding.phone.subtitle")}</p>
-            </div>
-
+          <>
             {!isOtpSent ? (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-left block">
-                    {t("onboarding.phone.label")}
-                  </Label>
-                  <div className="flex gap-2" dir="ltr">
-                    <div className="flex items-center justify-center px-3 border rounded-md bg-muted text-muted-foreground text-sm font-medium">
-                      +966
-                    </div>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="5X XXX XXXX"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="text-lg tracking-wide"
-                    />
-                  </div>
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
+                <div className="text-center space-y-2">
+                  <h2 className="text-2xl font-bold">{t("onboarding.phone.title")}</h2>
+                  <p className="text-muted-foreground">
+                    {t("onboarding.phone.subtitle", {
+                      en: "We'll send a code to verify your account",
+                      ar: "سوف يتم إرسال رمز التحقق للتحقّق من حسابك على الرقم التالي"
+                    })}
+                  </p>
+                  
                 </div>
-                <Button className="w-full h-12" onClick={() => setIsOtpSent(true)} disabled={phone.length < 9}>
-                  {t("onboarding.phone.sendOtp")}
-                </Button>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-left block">
+                      {t("onboarding.phone.label")}
+                    </Label>
+                    <div className="flex gap-2" dir="ltr">
+                      <div className="flex items-center justify-center px-3 border rounded-md bg-muted text-muted-foreground text-sm font-medium">
+                        +966
+                      </div>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="5X XXX XXXX"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="text-lg tracking-wide"
+                      />
+                    </div>
+                  </div>
+                  <Button className="w-full h-12" onClick={() => setIsOtpSent(true)} disabled={phone.length < 9}>
+                    {t("onboarding.phone.sendOtp")}
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="otp" className="text-left block">
-                    {t("onboarding.phone.otpLabel")}
-                  </Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    placeholder="XXXX"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    className="text-center text-2xl tracking-[1em] font-mono h-14"
-                    maxLength={4}
-                  />
-                </div>
-                <Button className="w-full h-12" onClick={handleNext} disabled={otp.length < 4}>
-                  {t("onboarding.phone.verify")}
-                </Button>
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
                 <div className="text-center space-y-2">
-                  <button
-                    onClick={() => setIsOtpSent(false)}
-                    className="text-sm text-emerald-600 hover:underline font-medium"
-                  >
-                    {t("onboarding.phone.changeNumber")}
-                  </button>
-                  <div className="text-xs text-muted-foreground">
-                    {language === "ar" ? "لم يصلك الرمز؟ " : "Didn't receive code? "}
-                    <button className="underline hover:text-emerald-600">
-                      {language === "ar" ? "إعادة إرسال" : "Resend"}
+                  <h2 className="text-2xl font-bold">{t("")}
+                    {t("onboarding.phone.title", {
+                      en: "Enter the code sent to your phone",
+                      ar: "الرجاء التحقق من الرمز المرسَل إلى هاتفك"
+                    })}
+                  </h2>
+                  <p className="text-muted-foreground">
+                    {t("onboarding.phone.subtitle", {
+                      en: "Check your messages for the 4-digit code",
+                      ar: "الرجاء إدخال رمز التحقق"
+                    })}
+                  </p>
+                  
+                </div>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="otp" className="text-left block">
+                      {t("onboarding.phone.otpLabel")}
+                    </Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      placeholder="XXXX"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      className="text-center text-2xl tracking-[1em] font-mono h-14"
+                      maxLength={4}
+                    />
+                  </div>
+                  <Button className="w-full h-12" onClick={handleNext} disabled={otp.length < 4}>
+                    {t("onboarding.phone.verify")}
+                  </Button>
+                  <div className="text-center space-y-2">
+                    <button
+                      onClick={() => setIsOtpSent(false)}
+                      className="text-sm text-emerald-600 hover:underline font-medium"
+                    >
+                      {t("onboarding.phone.changeNumber")}
                     </button>
+                    <div className="text-xs text-muted-foreground">
+                      {language === "ar" ? "لم يصلك الرمز؟ " : "Didn't receive code? "}
+                      <button className="underline hover:text-emerald-600">
+                        {language === "ar" ? "إعادة إرسال" : "Resend"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
-          </div>
+          </>
         )
+
 
       case "kyc":
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
             <div className="text-center space-y-2">
-              <h2 className="text-2xl font-bold">{t("onboarding.kyc.title")}</h2>
+              <h2 className="text-2xl font-bold">
+                 {t("onboarding.kyc.title", {
+                    en: "Introduce Yourself",
+                    ar: "عرفنا عليك"
+                  })}
+              </h2>
               <p className="text-muted-foreground">{t("onboarding.kyc.subtitle")}</p>
             </div>
 

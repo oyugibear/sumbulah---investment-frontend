@@ -411,7 +411,7 @@ export const translations = {
         emergency: "Emergency Fund",
         hajj: "Hajj / Umrah",
         car: "New Car",
-        home: "Home Down Payment",
+        home: "Save For A Home",
         marriage: "Marriage",
         wealth: "General Wealth",
       },
@@ -838,9 +838,9 @@ export const translations = {
         emergency: "صندوق الطوارئ",
         hajj: "الحج / العمرة",
         car: "سيارة جديدة",
-        home: "دفعة أولى للمنزل",
+        home:"الادخار لمنزل",
         marriage: "الزواج",
-        wealth: "بناء الثروة",
+        wealth: "تنمية الثروة",
       },
       goal: {
         title: "ما الذي تدخر من أجله؟",
@@ -867,7 +867,7 @@ export const translations = {
         moderate: "متوازن",
         moderateDesc: "نهج متوازن مع تقسيم متساوٍ بين التوفير والاستثمار.",
         growth: "نمو",
-        growthDesc: "تعظيم العوائد. جميع الأموال موجهة إلى محفظة استثمارية متوافقة مع الشريعة.",
+        growthDesc: "تنمية العوائد ، جميع الأموال الموجهة الى محفظتك الاستثمارية متوافقة مع الشريعة الإسلامية",
       },
     },
   },
@@ -875,7 +875,13 @@ export const translations = {
 
 export type TranslationKey = keyof typeof translations.en
 
-export function t(key: string, lang: "en" | "ar" = "en"): string {
+export function t(key: string, lang: "en" | "ar" = "en", customText?: { en?: string; ar?: string }): string {
+  // If custom text is provided and exists for the current language, use it
+  if (customText && customText[lang]) {
+    return customText[lang]!
+  }
+
+  // Otherwise, use the standard translation lookup
   const keys = key.split(".")
   let value: any = translations[lang]
 

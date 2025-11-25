@@ -7,7 +7,7 @@ export function useTranslation() {
   const { state } = useApp()
   const { language } = state.settings
 
-  const t = (key: string) => translate(key, language)
+  const t = (key: string, customText?: { en?: string; ar?: string }) => translate(key, language, customText)
 
   return { t, language }
 }
